@@ -1,0 +1,30 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "incremental": false,
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "next/link": [
+        "./tests/stubs/next-link.tsx"
+      ],
+      "next/navigation": [
+        "./tests/stubs/next-navigation.ts"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "scripts/verify/**/*.ts",
+    "scripts/verify/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    ".verify-dist"
+  ]
+}
