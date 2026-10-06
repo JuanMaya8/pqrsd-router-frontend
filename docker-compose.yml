@@ -1,0 +1,42 @@
+# The whole system (IA + backend + frontend). Expects the other two repos next to this one:
+#   ../pqrsd-router-ai   ../pqrsd-router-backend
+# Usage:  STAFF_API_KEY=cambia-esto docker compose up --build     → http://localhost:3000
+# (NEVER EXECUTED in the authoring sandbox — see README «Qué está hecho y qué no».)
+services:
+  ai:
+    build: ../pqrsd-router-ai
+    environment:
+      MODELS_DIR: /data/models
+      FEEDBACK_FILE: /data/feedback/feedback.jsonl
+    volumes:
+      - ai-models:/data/models
+      - ai-feedback:/data/feedback
+  backend:
+    build: ../pqrsd-router-backend
+    depends_on: [ai]
+    environment:
+      PORT: 3001
+      DATA_DIR: /data
+      AI_URL: http://ai:8000
+      STAFF_API_KEY: ${STAFF_API_KEY:?define STAFF_API_KEY}
+      CORS_ORIGINS: http://localhost:3000
+    volumes:
+      - backend-data:/data
+    ports:
+      - "3001:3001"
+  frontend:
+    build:
+      context: .
+      args:
+        # inlined in the browser bundle: the PUBLIC address of the backend
+        NEXT_PUBLIC_API_URL: http://localhost:3001/api/v1
+    depends_on: [backend]
+    environment:
+      # used only by the Next.js server (SSR / ISR): the address of the backend INSIDE the compose network
+      API_URL_INTERNAL: http://backend:3001/api/v1
+    ports:
+      - "3000:3000"
+volumes:
+  ai-models:
+  ai-feedback:
+  backend-data:
