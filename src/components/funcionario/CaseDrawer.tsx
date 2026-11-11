@@ -61,6 +61,9 @@ export function CaseDrawer({ id, api, taxonomy, onClose, onChanged }: { id: stri
 
   const changed = d && (form.type !== d.effective.type || form.dependency !== d.effective.dependency || form.urgency !== d.effective.urgency || (form.type === 'peticion' && form.subtype !== (d.effective.subtype ?? '')));
   const open = d && (d.status === 'pending_review' || d.status === 'assigned');
+  const extDays = Number(ext.days);
+  const canExtend = open && !d.extension && d.slaStatus !== 'overdue';
+  const extValid = Number.isInteger(extDays) && extDays >= 1 && d !== null && extDays <= d.deadline.legalDays && ext.reason.trim().length >= 20;
 
   return (
     <>
