@@ -155,6 +155,7 @@ function Dashboard({ staffKey, onLogout, socketFactory }: { staffKey: string; on
         </div>
         <div className="row">
           <label className="check"><input type="checkbox" checked={!!filters.needsReview} onChange={(e) => setFilter({ needsReview: e.target.checked || undefined })} /><span>Solo las que la IA no está segura de clasificar</span></label>
+          <label className="check"><input type="checkbox" data-testid="f-unassigned" checked={!!filters.unassigned} onChange={(e) => setFilter({ unassigned: e.target.checked || undefined })} /><span>Solo sin responsable</span></label>
           <button className="btn sm" onClick={() => { setFilters({ sort: 'priority:desc' }); setSearch(''); setPage(0); }}>Limpiar filtros</button>
         </div>
       </section>
