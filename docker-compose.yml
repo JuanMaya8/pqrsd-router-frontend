@@ -28,7 +28,9 @@ services:
       - ai-feedback:/data/feedback
   backend:
     build: ../pqrsd-router-backend
-    depends_on: [ai]
+    depends_on:
+      db: { condition: service_healthy }
+      ai: { condition: service_started }
     environment:
       PORT: 3001
       DATA_DIR: /data
