@@ -50,6 +50,7 @@ export function CaseDrawer({ id, api, taxonomy, me = null, onClose, onChanged }:
       setD(next);
       setAssignee(next.assignee ?? '');
       setExt({ days: '', reason: '' });
+      setTr({ entity: '', reason: '' });
       setForm({ type: next.effective.type, subtype: next.effective.subtype ?? '', dependency: next.effective.dependency, urgency: next.effective.urgency });
       setResponse('');
       onChanged();
