@@ -1,7 +1,8 @@
 # The whole system (IA + backend + frontend). Expects the other two repos next to this one:
 #   ../pqrsd-router-ai   ../pqrsd-router-backend
-# Usage:  STAFF_API_KEY=cambia-esto docker compose up --build     → http://localhost:3000
-# Verified: `docker compose up --build` + `npm run e2e:fullstack` (8/8).
+# Usage:  docker compose up --build     → http://localhost:3000
+# Demo staff keys (local demo only, override them with env vars): shared «demo-funcionario-2026», «ana-demo-2026» (Ana Pérez), «luis-demo-2026» (Luis Ruiz).
+# Verified: `docker compose up --build` + `npm run e2e:fullstack` (12/12).
 services:
   db:
     image: postgres:16-alpine
