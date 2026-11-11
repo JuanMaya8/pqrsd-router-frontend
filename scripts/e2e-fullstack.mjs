@@ -37,6 +37,7 @@ try {
   const preview = citizen.getByTestId('preview-ready');
   await preview.waitFor({ timeout: 20_000 });
   const previewText = await preview.innerText();
+  await audit(citizen, '/radicar con vista previa');
   check('Radicar: la vista previa usa la IA real y sugiere Servicios Públicos', /Servicios P[uú]blicos/i.test(previewText), previewText.slice(0, 160));
 
   // --- staff: log in first, so the live socket is open when the case arrives
