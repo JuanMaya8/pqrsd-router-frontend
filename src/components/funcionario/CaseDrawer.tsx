@@ -128,6 +128,7 @@ export function CaseDrawer({ id, api, taxonomy, me = null, onClose, onChanged }:
                   <button className="btn" disabled={busy || assignee.trim() === (d.assignee ?? '') || (assignee.trim().length > 0 && assignee.trim().length < 3)} onClick={() => run(() => api.assign(d.id, assignee.trim() || null))}>
                     {assignee.trim() ? 'Asignar' : 'Quitar responsable'}
                   </button>
+                  {me && me.length >= 3 && d.assignee !== me && <button className="btn" disabled={busy} onClick={() => run(() => api.assign(d.id, me))}>Asignarme</button>}
                 </div>
               </section>
             )}
