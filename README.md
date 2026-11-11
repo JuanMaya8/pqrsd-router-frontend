@@ -30,7 +30,7 @@ npm run build && npm start        # producción
 
 Todo el sistema con Docker (espera `../pqrsd-router-ai` y `../pqrsd-router-backend`):
 ```bash
-STAFF_API_KEY=cambia-esto docker compose up --build     # → http://localhost:3000   (clave de funcionario: la que pusiste)
+docker compose up --build     # → http://localhost:3000   (claves de demo: ana-demo-2026, luis-demo-2026, demo-funcionario-2026)
 ```
 
 Primer recorrido sugerido: en `/funcionario` entra con la clave → «IA y datos de demostración» → **Crear 60 casos de demostración**;
