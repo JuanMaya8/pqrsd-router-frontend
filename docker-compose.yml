@@ -37,7 +37,8 @@ services:
       DATA_DIR: /data
       DATABASE_URL: postgres://pqrsd:pqrsd@db:5432/pqrsd
       AI_URL: http://ai:8000
-      STAFF_API_KEY: ${STAFF_API_KEY:?define STAFF_API_KEY}
+      STAFF_API_KEY: ${STAFF_API_KEY:-demo-funcionario-2026}
+      STAFF_USERS: ${STAFF_USERS:-Ana Pérez:ana-demo-2026,Luis Ruiz:luis-demo-2026}
       CORS_ORIGINS: http://localhost:3000
     volumes:
       - backend-data:/data
