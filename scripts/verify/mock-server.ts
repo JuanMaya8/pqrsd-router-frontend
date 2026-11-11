@@ -86,6 +86,7 @@ export async function startMock(): Promise<MockHandle> {
     // ---- staff
     if (path.startsWith('/staff')) {
       if (staffKey !== state.key) return fail(401, 'UNAUTHORIZED', 'Clave de funcionario inválida.');
+      if (path === '/staff/me') return json(200, { name: 'Funcionario de prueba' });
       if (path === '/staff/stats') return json(200, { ...staffStats, totals: { ...staffStats.totals, all: cases.size } });
       if (path === '/staff/ai/status') return json(200, { available: true, modelVersion: 'hybrid-1741000000', model: { syntheticSamples: 1200, feedbackSamples: 3, trainedAt: 1741000000, note: 'Entrenada con datos sintéticos de arranque.' }, feedback: { total: 3, sinceLastTraining: 1 } });
       if (path === '/staff/pqrsd' && req.method === 'GET') {
