@@ -29,6 +29,13 @@ test('TrackingView: sin respuesta avisa el plazo y no muestra datos personales',
   assert.doesNotMatch(h, /@|cédula|documentId/);
 });
 
+test('TrackingView: un caso trasladado (Art. 21) dice a qué autoridad se remitió', () => {
+  const t = text(html(<TrackingView t={{ ...tracking, status: 'closed', statusLabel: 'Cerrada', transfer: { entity: 'Superintendencia de Salud', at: '2025-03-06T15:00:00.000Z' } }} />));
+  assert.match(t, /trasladada a Superintendencia de Salud/);
+  assert.match(t, /Art\. 21/);
+  assert.doesNotMatch(text(html(<TrackingView t={tracking} />)), /trasladada/);
+});
+
 test('TransparencyView: con demo avisa que son datos simulados; sin datos no divide por cero', () => {
   assert.match(text(html(<TransparencyView s={publicStats} />)), /Datos de demostración/);
   assert.match(text(html(<TransparencyView s={publicStats} />)), /87,5 %/);
