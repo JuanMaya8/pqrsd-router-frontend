@@ -41,7 +41,7 @@ try {
   check('Radicar: la vista previa usa la IA real y sugiere Servicios Públicos', /Servicios P[uú]blicos/i.test(previewText), previewText.slice(0, 160));
 
   // --- staff: log in first, so the live socket is open when the case arrives
-  const staff = await browser.newPage();
+  const staff = await (await browser.newContext()).newPage();
   staff.on('pageerror', (e) => errors.push(e.message));
   await staff.goto(`${BASE}/funcionario`);
   await staff.locator('#staff-key').fill(KEY);
