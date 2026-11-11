@@ -109,7 +109,39 @@ export function CaseDrawer({ id, api, taxonomy, onClose, onChanged }: { id: stri
               <h3>Plazo legal</h3>
               <p style={{ marginBottom: 4 }}><b>{d.deadline.legalDays} días hábiles</b> → vence <b>{fmtDay(d.dueDate)}</b> · {dueText(d.businessDaysLeft, d.slaStatus)}</p>
               <p className="small muted">{d.deadline.basis}{d.deadline.verify && <b> Verificar con el área jurídica.</b>}</p>
+              {d.extension && (
+                <p className="alert" data-testid="extension">
+                  Plazo ampliado {d.extension.days} días hábiles (antes vencía el {fmtDay(d.extension.originalDueDate)}). Motivo: {d.extension.reason}
+                </p>
+              )}
             </section>
+
+            {open && (
+              <section className="card flat stack" aria-label="Responsable">
+                <h3 style={{ margin: 0 }}>Responsable</h3>
+                <div className="row">
+                  <div className="field" style={{ flex: 1, minWidth: 200 }}><label htmlFor="d-f-assignee">Funcionario a cargo</label>
+                    <input id="d-f-assignee" className="input" value={assignee} maxLength={120} placeholder="Nombre y apellido" onChange={(e) => setAssignee(e.target.value)} /></div>
+                  <button className="btn" disabled={busy || assignee.trim() === (d.assignee ?? '') || (assignee.trim().length > 0 && assignee.trim().length < 3)} onClick={() => run(() => api.assign(d.id, assignee.trim() || null))}>
+                    {assignee.trim() ? 'Asignar' : 'Quitar responsable'}
+                  </button>
+                </div>
+              </section>
+            )}
+
+            {canExtend && (
+              <details className="card flat" aria-label="Ampliar plazo">
+                <summary style={{ cursor: 'pointer', fontWeight: 650 }}>Ampliar el plazo (Art. 14, parágrafo, Ley 1437 de 2011)</summary>
+                <div className="stack" style={{ marginTop: 10 }}>
+                  <p className="small muted" style={{ margin: 0 }}>Solo una vez y antes del vencimiento. El nuevo plazo no puede superar el doble del inicial (máximo {d.deadline.legalDays} días hábiles más). Si el ciudadano dejó correo, se le informa el motivo y la nueva fecha.</p>
+                  <div className="field" style={{ maxWidth: 200 }}><label htmlFor="d-f-days">Días hábiles adicionales</label>
+                    <input id="d-f-days" className="input" type="number" min={1} max={d.deadline.legalDays} value={ext.days} onChange={(e) => setExt({ ...ext, days: e.target.value })} /></div>
+                  <div className="field"><label htmlFor="d-f-reason">Motivo (se informa al ciudadano)</label>
+                    <textarea id="d-f-reason" className="input" style={{ minHeight: 80 }} maxLength={1000} value={ext.reason} placeholder="Explica por qué no es posible responder a tiempo (mínimo 20 caracteres)…" onChange={(e) => setExt({ ...ext, reason: e.target.value })} /></div>
+                  <div><button className="btn" disabled={busy || !extValid} onClick={() => run(() => api.extend(d.id, extDays, ext.reason.trim()))}>Ampliar plazo</button></div>
+                </div>
+              </details>
+            )}
 
             {d.citizen && (
               <section>
