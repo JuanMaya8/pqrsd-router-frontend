@@ -99,13 +99,16 @@ Flujo de datos: `navegador → api.ts → backend (/api/v1) → IA`. El servidor
 * **Contra el servicio real del backend** (no el simulado): se levantó el dominio real de `pqrsd-router-backend` (con una IA falsa) detrás de HTTP y se recorrió radicar → vista previa → recibo → consulta → bandeja → detalle → confirmar → responder → cerrar → demo. Pasó, y destapó dos defectos reales que ya están corregidos (el backend ordenaba arriba las solicitudes ya respondidas; y un selector del panel de detalle duplicaba ids con los filtros). Ese adaptador es un script temporal y **no** está en este repo.
 * Compatibilidad estática de tipos: las respuestas de los 10 endpoints que usa la interfaz (`preview`, `create`, `tracking`, `transparency`, `taxonomy`, `list`, `get`, `stats`, `aiStatus`, `seed`) son asignables a los tipos de `lib/types.ts`.
 
-**No verificado (escrito pero nunca ejecutado):**
-* **`next dev`, `next build` y `next start`**: en el sandbox no se pudo instalar `next` (npm bloqueado). Las páginas de `src/app/**` (SSG/SSR/ISR, `metadata`, `robots.ts`, `error.tsx`) y `next.config.mjs` están revisados a mano contra la API de Next 14 pero **nunca se compilaron**. Es el primer paso al retomar: `npm install && npm run build`.
-* Que `/transparencia` se regenere de verdad cada 60 s, que `/consulta/...` no se cachee y el comportamiento con el backend caído durante `next build` (la página tiene un estado de error, pero hay que mirarlo).
-* **`socket.io-client` real** (`defaultSocketFactory`) contra el gateway real: en las pruebas se inyecta un socket falso. Tampoco se probó el reintento ni el cambio de `polling` a `websocket`.
-* React 18 (lo que declara `package.json`): las pruebas y el navegador se ejecutaron con React 19, lo único instalable en el sandbox. Los tipos de React/Next se simularon con declaraciones mínimas (`any` en JSX y eventos), así que `npm run typecheck` con los `@types` reales puede encontrar errores nuevos.
-* `Dockerfile`, `docker-compose.yml` y el workflow de CI no se ejecutaron.
-* Firefox/Safari, lectores de pantalla y una auditoría de accesibilidad (axe/Lighthouse): no se hicieron.
+**Verificado al retomar (2026-11-11, Windows, Node 22, Next 14.2 y React 18 reales):**
+* `npm run typecheck` limpio con los `@types` reales, `npm test` → 16 pruebas, `npm run build` OK: `/` estático, `/transparencia` con ISR de 60 s (`prerender-manifest`), `/consulta/[radicado]` dinámico.
+* **`npm run e2e:fullstack` → 8 de 8** (`scripts/e2e-fullstack.mjs`) en Chromium contra la pila **real**: `next start` + `pqrsd-router-backend` + `pqrsd-router-ai`, primero como procesos locales y luego con `docker compose up --build` de los 3 repos.
+  Cubre la vista previa con la IA real, el socket real (`defaultSocketFactory`, «En vivo»), el caso nuevo que aparece solo en la bandeja, la consulta SSR con `noindex` y transparencia.
+* Defecto real corregido: el `Dockerfile` deja `NEXT_PUBLIC_SOCKET_URL=""` y `socketOrigin()` usaba `??`, así que en Docker el socket se conectaba al propio frontend. Ahora usa `||` (prueba en `tests/api.test.ts`).
+* Con el backend caído durante `next build` (siempre ocurre en Docker), `/transparencia` muestra el aviso de error hasta que vence la primera ventana de 60 s; después se regenera sola (comprobado).
+* `verify:browser` corría solo en Linux: el `import()` de una ruta absoluta falla en Windows; ahora usa `pathToFileURL`.
+
+**No verificado:**
+* Reconexión del socket tras caídas largas del backend; Firefox/Safari, lectores de pantalla y auditoría de accesibilidad (axe/Lighthouse).
 * Rendimiento con miles de casos en la bandeja (pagina de 50 en 50; no se midió).
 
 ## Limitaciones conocidas
