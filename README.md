@@ -92,7 +92,7 @@ Flujo de datos: `navegador → api.ts → backend (/api/v1) → IA`. El servidor
 
 ## Qué está hecho y qué no
 
-**Verificado** (sandbox: Node 22, Chromium 141 de Playwright):
+**Verificado en el entorno original** (sandbox: Node 22, Chromium 141 de Playwright):
 * `npm test` → 14 pruebas (formato colombiano, fechas civiles sin desfase de zona horaria, segmentación de entidades con casos límite, render de `TrackingView`, `TransparencyView` —con y sin datos—, `Inbox`, `StatsPanel`, `ClassificationPreview`, `ReceiptCard`).
 * `tsc` estricto sobre `src/`, `tests/` y `scripts/verify/` (con declaraciones mínimas de React/Next hechas a mano, ver «No verificado»).
 * **`verify:browser` → 48 de 48** en Chromium real con los componentes reales: vista previa con *debounce* y descarte de respuestas viejas (carrera provocada a propósito), validación, error 429 sin perder el texto, recibo, modo anónimo sin datos personales, formato de radicado, ingreso de funcionario (clave mala / buena / clave revocada a mitad de sesión), filtros, búsqueda con *debounce*, panel de detalle (entidades resaltadas, datos personales marcados, confirmar → reclasificar → responder → cerrar), exportación CSV, tiempo real (una ráfaga = una recarga), datos de demostración, reentrenar, cierre de sesión y ausencia de desbordamiento horizontal a 375 px.
