@@ -135,6 +135,7 @@ export const detail = (s: Summary): Detail => {
   ...s,
   text,
   channel: 'web',
+  extension: null,
   citizen: { name: 'Ana Pérez', email: 'ana@example.com', documentId: '52123456' },
   classification: {
     source: s.source,
