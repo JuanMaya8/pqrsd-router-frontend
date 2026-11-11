@@ -231,7 +231,7 @@ export function CaseDrawer({ id, api, taxonomy, me = null, onClose, onChanged }:
 
             <section>
               <h3>Historial</h3>
-              <Timeline items={d.timeline.map((t) => ({ at: t.at, label: `${EVENT_ES[t.event] ?? t.event} · ${BY_ES[t.by] ?? t.by}`, detail: t.detail }))} />
+              <Timeline items={d.timeline.map((t) => ({ at: t.at, label: `${EVENT_ES[t.event] ?? t.event} · ${t.actor ?? BY_ES[t.by] ?? t.by}`, detail: t.detail }))} />
             </section>
           </div>
         )}
