@@ -126,6 +126,7 @@ function Dashboard({ staffKey, onLogout, socketFactory }: { staffKey: string; on
             <span className="dot" style={{ color: live ? 'var(--ok)' : 'var(--muted)' }} aria-hidden="true" />{live ? 'En vivo' : 'Sin conexión en vivo'}
           </span>
           <button className="btn sm" onClick={() => act(async () => downloadBlob('pqrsd.csv', await client.exportCsv(query)), 'CSV descargado (sin textos ni datos personales).')} disabled={busy}>Exportar CSV</button>
+          {me && <span className="chip" data-testid="me" title="Tu nombre queda en el historial de cada acción">Sesión: {me}</span>}
           <button className="btn sm" onClick={onLogout}>Salir</button>
         </div>
       </header>
