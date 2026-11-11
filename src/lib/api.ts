@@ -49,6 +49,9 @@ async function send(path: string, o: Options): Promise<Response> {
   };
   if (o.revalidate !== undefined && typeof window === 'undefined') init.next = { revalidate: o.revalidate };
   else init.cache = 'no-store';
+  // Server side (SSR/ISR) never waits forever: a sleeping backend (free hosting tiers) would exceed the serverless time limit.
+  const timeout = typeof window === 'undefined' && !o.signal ? AbortSignal.timeout(SERVER_TIMEOUT_MS) : undefined;
+  if (timeout) init.signal = timeout;
   try {
     return await fetch(`${apiBaseUrl()}${path}`, init);
   } catch (e) {
