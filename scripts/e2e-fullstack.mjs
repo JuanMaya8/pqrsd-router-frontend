@@ -21,8 +21,14 @@ const check = (name, ok, detail = '') => {
 
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROMIUM_PATH || undefined });
 const errors = [];
+const a11y = [];
+/** axe-core, WCAG 2.1 A/AA: records every violation found on the current state of the page. */
+const audit = async (page, name) => {
+  const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+  for (const v of r.violations) a11y.push(`${name}: ${v.id} (${v.impact}, ${v.nodes.length})`);
+};
 try {
-  const citizen = await browser.newPage();
+  const citizen = await (await browser.newContext()).newPage();
   citizen.on('pageerror', (e) => errors.push(e.message));
 
   // --- citizen: write, see the live preview from the real AI, file the case
