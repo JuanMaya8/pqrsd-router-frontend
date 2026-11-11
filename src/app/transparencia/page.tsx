@@ -6,6 +6,7 @@ import type { PublicStats } from '@/lib/types';
 export const metadata: Metadata = { title: 'Transparencia' };
 // ISR: public aggregates change slowly. Served from cache and regenerated in the background at most once a minute.
 export const revalidate = 60;
+export const maxDuration = 30;
 
 export default async function TransparencyPage() {
   let stats: PublicStats | null = null;
