@@ -10,6 +10,8 @@ La pantalla de **transparencia** publica el cuello de botella medido (respondida
 
 Next.js 14 (App Router) · TypeScript · CSS propio (sin Tailwind) · socket.io-client. Interfaz en español; código en inglés.
 
+> **Para la entrega:** guía de demostración con claves de prueba y recorrido de 10 minutos en [docs/GUIA_DEMO.md](docs/GUIA_DEMO.md).
+
 ## Cómo ejecutarlo
 
 Requisitos: **Node 18.18+**. Para ver datos reales hace falta el backend en `:3001` (que a su vez usa la IA en `:8000`, o su respaldo por palabras clave).
