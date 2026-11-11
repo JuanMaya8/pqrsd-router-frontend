@@ -202,7 +202,7 @@ function Dashboard({ staffKey, onLogout, socketFactory }: { staffKey: string; on
       {note && <p className="alert" role="status" data-testid="note">{note}</p>}
 
       {selected && taxonomy && (
-        <CaseDrawer id={selected} api={client} taxonomy={taxonomy} onClose={() => setSelected(null)} onChanged={() => setTick((t) => t + 1)} />
+        <CaseDrawer id={selected} api={client} taxonomy={taxonomy} me={me} onClose={() => setSelected(null)} onChanged={() => setTick((t) => t + 1)} />
       )}
     </div>
   );
