@@ -107,8 +107,14 @@ Flujo de datos: `navegador → api.ts → backend (/api/v1) → IA`. El servidor
 * Con el backend caído durante `next build` (siempre ocurre en Docker), `/transparencia` muestra el aviso de error hasta que vence la primera ventana de 60 s; después se regenera sola (comprobado).
 * `verify:browser` corría solo en Linux: el `import()` de una ruta absoluta falla en Windows; ahora usa `pathToFileURL`.
 
+**Añadido y verificado (2026-11-11):**
+* Panel de detalle: **responsable** (asignar / quitar) y **ampliación del plazo** (Art. 14 parágrafo; no se ofrece si el caso ya venció). La bandeja muestra el responsable y la etiqueta «ampliado»; filtro «Solo sin responsable».
+* **Accesibilidad**: axe-core (WCAG 2.1 A/AA) dentro de `e2e:fullstack` sobre todas las pantallas, en modo claro y oscuro. Encontró contraste insuficiente en las etiquetas de urgencia alta/media (3,3:1); se oscurecieron `--warn` y `--high` (≈5:1).
+* `sitemap.xml` y `robots.txt` con el dominio (`NEXT_PUBLIC_SITE_URL` o el de producción de Vercel). Peticiones del servidor con límite de 25 s y `maxDuration = 30` en las páginas dinámicas (backend dormido en Render).
+* `e2e:fullstack` → 12 de 12 contra Docker con PostgreSQL (asignar, ampliar, el ciudadano ve la ampliación sin el responsable). `verify:browser` → 50 de 50.
+
 **No verificado:**
-* Reconexión del socket tras caídas largas del backend; Firefox/Safari, lectores de pantalla y auditoría de accesibilidad (axe/Lighthouse).
+* Reconexión del socket tras caídas largas del backend; Firefox/Safari y revisión con lector de pantalla (axe no la sustituye); el despliegue real en Vercel.
 * Rendimiento con miles de casos en la bandeja (pagina de 50 en 50; no se midió).
 
 ## Limitaciones conocidas
