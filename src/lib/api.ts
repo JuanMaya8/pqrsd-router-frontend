@@ -13,6 +13,8 @@ export class ApiError extends Error {
 }
 
 const DEFAULT_URL = 'http://localhost:3001/api/v1';
+/** Server-side request budget (Vercel functions are capped by `maxDuration` in the pages that render on demand). */
+const SERVER_TIMEOUT_MS = 25_000;
 
 export function apiBaseUrl(): string {
   if (typeof window === 'undefined') return (process.env.API_URL_INTERNAL || process.env.NEXT_PUBLIC_API_URL || DEFAULT_URL).replace(/\/$/, '');
