@@ -11,7 +11,7 @@ import { createRequire } from 'node:module';
 import { createServer } from 'node:http';
 import { existsSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
 import { dirname, extname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const toolsDir = process.env.TOOLS_DIR;
