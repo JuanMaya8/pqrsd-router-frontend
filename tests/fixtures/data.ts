@@ -116,6 +116,8 @@ const base = (n: number, over: Partial<Summary>): Summary => ({
   slaStatus: 'on_time',
   source: 'ai',
   isDemo: false,
+  assignee: null,
+  extended: false,
   ...over,
 });
 
