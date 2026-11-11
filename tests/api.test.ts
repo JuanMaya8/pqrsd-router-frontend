@@ -25,3 +25,10 @@ test('una variable vacía (como la deja el Dockerfile) no anula la URL del backe
   withEnv({ NEXT_PUBLIC_SOCKET_URL: 'wss://rt.entidad.gov.co', NEXT_PUBLIC_API_URL: 'http://x/api/v1' }, () => assert.equal(socketOrigin(), 'wss://rt.entidad.gov.co'));
   withEnv({ API_URL_INTERNAL: '', NEXT_PUBLIC_API_URL: 'http://backend:3001/api/v1/' }, () => assert.equal(apiBaseUrl(), 'http://backend:3001/api/v1'));
 });
+
+test('siteUrl: explícita, dominio de producción de Vercel o localhost', async () => {
+  const { siteUrl } = await import('../src/lib/site');
+  assert.equal(siteUrl({ NEXT_PUBLIC_SITE_URL: 'https://pqrsd.gov.co/' }), 'https://pqrsd.gov.co');
+  assert.equal(siteUrl({ VERCEL_PROJECT_PRODUCTION_URL: 'pqrsd-router.vercel.app' }), 'https://pqrsd-router.vercel.app');
+  assert.equal(siteUrl({}), 'http://localhost:3000');
+});
