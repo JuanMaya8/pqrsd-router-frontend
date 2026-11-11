@@ -229,6 +229,12 @@ await page.getByTestId('drawer').getByText(/Reclasificada por funcionario/).wait
 const rc = calls('POST', /reclassify$/).at(-1).body;
 check('Detalle: la corrección envía solo los campos esperados', rc.dependency === 'movilidad' && rc.type === 'peticion' && rc.subtype === 'general', JSON.stringify(rc));
 
+check('Detalle: un caso vencido no ofrece ampliar el plazo (la ley exige hacerlo antes del vencimiento)', (await page.getByText(/Ampliar el plazo/).count()) === 0);
+await page.locator('#d-f-assignee').fill('María Gómez');
+await page.getByRole('button', { name: 'Asignar' }).click();
+await page.getByTestId('drawer').getByText(/Responsable asignado/).waitFor();
+check('Detalle: asignar un responsable lo envía al backend y queda en el historial', calls('POST', /assign$/).at(-1)?.body?.assignee === 'María Gómez');
+
 const send = page.getByRole('button', { name: 'Enviar respuesta' });
 await page.locator('#resp').fill('corta');
 check('Detalle: una respuesta de menos de 10 caracteres no se puede enviar', await send.isDisabled());
