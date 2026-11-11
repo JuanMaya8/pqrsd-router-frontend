@@ -75,10 +75,10 @@ Si cambias una pantalla, ajusta `scripts/browser-verify.mjs` (los textos y `data
 * Adjuntos en la radicación; verificación anti-bots (captcha) en `/radicar`.
 
 ## 6. Checklist para llegar al 100 % (en orden)
-1. `npm install`, `npm run typecheck`, `npm test`, `npm run build`; arreglar errores de tipos con los `@types` reales y cualquier problema de Next (revisar `export const revalidate`/`dynamic`).
-2. `npm run verify:browser` con las dependencias reales (Playwright) y `docker compose up --build` con los 3 repos; comprobar el socket real (`auth.staffKey`, CORS) y que «En vivo» aparezca.
-3. Probar los patrones de renderizado en producción (`next start`): `/` y `/transparencia` en caché, `/consulta/...` siempre dinámico, tiempos de respuesta con el backend lento.
-4. Pruebas e2e con Playwright sobre `next start` + backend real + IA real; auditoría de accesibilidad (axe/Lighthouse) y revisión con lector de pantalla.
+1. ~~`npm install`, `npm run typecheck`, `npm test`, `npm run build`.~~ ✅
+2. ~~`npm run verify:browser` y `docker compose up --build` con los 3 repos; socket real y «En vivo».~~ ✅
+3. ~~Patrones de renderizado en producción (`next start`).~~ ✅ (falta medir con el backend lento)
+4. ~~Pruebas e2e sobre `next start` + backend real + IA real~~ ✅ (`e2e:fullstack`); pendiente: auditoría de accesibilidad (axe/Lighthouse) y lector de pantalla.
 5. Autenticación por usuario y roles (reemplazar la clave compartida), asignación a funcionarios, vistas por dependencia.
 6. Captcha o prueba de trabajo en `/radicar`, textos legales revisados por el área jurídica, identidad visual de la entidad.
 7. Observabilidad (errores del navegador, métricas Web Vitals), CDN y despliegue.
