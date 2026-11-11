@@ -82,7 +82,7 @@ y `maxDuration = 30` (Vercel + backend dormido en Render), `docs/DEPLOY.md` (Ver
 1. ~~`npm install`, `npm run typecheck`, `npm test`, `npm run build`.~~ ✅
 2. ~~`npm run verify:browser` y `docker compose up --build` con los 3 repos; socket real y «En vivo».~~ ✅
 3. ~~Patrones de renderizado en producción (`next start`).~~ ✅ (falta medir con el backend lento)
-4. ~~Pruebas e2e sobre `next start` + backend real + IA real~~ ✅ (`e2e:fullstack`); pendiente: auditoría de accesibilidad (axe/Lighthouse) y lector de pantalla.
-5. Autenticación por usuario y roles (reemplazar la clave compartida), asignación a funcionarios, vistas por dependencia.
+4. ~~Pruebas e2e sobre `next start` + backend real + IA real; auditoría axe.~~ ✅ — pendiente: revisión con lector de pantalla.
+5. Autenticación por usuario y roles (reemplazar la clave compartida), vistas por dependencia. (~~Asignación a funcionarios~~ ✅)
 6. Captcha o prueba de trabajo en `/radicar`, textos legales revisados por el área jurídica, identidad visual de la entidad.
-7. Observabilidad (errores del navegador, métricas Web Vitals), CDN y despliegue.
+7. Observabilidad (errores del navegador, métricas Web Vitals). Despliegue: listo para Vercel (`docs/DEPLOY.md`).
