@@ -75,6 +75,8 @@ function Dashboard({ staffKey, onLogout, socketFactory }: { staffKey: string; on
   const [tick, setTick] = useState(0);
   const [note, setNote] = useState('');
   const [busy, setBusy] = useState(false);
+  const [me, setMe] = useState<string | null>(null);
+  useEffect(() => { client.me().then((r) => setMe(r.name)).catch(() => setMe(null)); }, [client]);
   const timer = useRef<ReturnType<typeof setTimeout>>();
 
   const bump = useCallback(() => {
