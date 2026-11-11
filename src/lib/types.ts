@@ -125,7 +125,9 @@ export interface Detail extends Summary {
   effective: { type: PqrsdType; subtype: Subtype | null; dependency: string; urgency: Urgency };
   deadline: { legalDays: number; basis: string; verify: boolean; countFrom: string; dueDate: string };
   extension: { days: number; reason: string; at: string; originalDueDate: string } | null;
-  timeline: Array<{ at: string; event: string; by: string; detail?: string }>;
+  transfer?: { entity: string; reason: string; at: string; late: boolean } | null;
+  /** actor: staff member who acted (named accounts, STAFF_USERS) */
+  timeline: Array<{ at: string; event: string; by: string; actor?: string; detail?: string }>;
   response: { text: string; answeredAt: string } | null;
 }
 
