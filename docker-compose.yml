@@ -55,6 +55,7 @@ services:
     ports:
       - "3000:3000"
 volumes:
+  db-data:
   ai-models:
   ai-feedback:
   backend-data:
