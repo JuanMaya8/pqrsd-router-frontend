@@ -8,6 +8,7 @@
  * Env: E2E_BASE_URL (default http://localhost:3000), E2E_STAFF_KEY (default empty = backend in dev mode), CHROMIUM_PATH.
  * It creates real cases in the backend: run it against a development data directory, never production.
  */
+import { AxeBuilder } from '@axe-core/playwright';
 import { chromium } from 'playwright';
 
 const BASE = (process.env.E2E_BASE_URL ?? 'http://localhost:3000').replace(/\/$/, '');
