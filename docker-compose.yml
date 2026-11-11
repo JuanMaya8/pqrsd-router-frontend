@@ -1,7 +1,7 @@
 # The whole system (IA + backend + frontend). Expects the other two repos next to this one:
 #   ../pqrsd-router-ai   ../pqrsd-router-backend
 # Usage:  STAFF_API_KEY=cambia-esto docker compose up --build     → http://localhost:3000
-# (NEVER EXECUTED in the authoring sandbox — see README «Qué está hecho y qué no».)
+# Verified: `docker compose up --build` + `npm run e2e:fullstack` (8/8).
 services:
   ai:
     build: ../pqrsd-router-ai
