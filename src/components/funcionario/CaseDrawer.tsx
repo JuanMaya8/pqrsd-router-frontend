@@ -26,6 +26,7 @@ export function CaseDrawer({ id, api, taxonomy, onClose, onChanged }: { id: stri
     try {
       const detail = await api.get(id);
       setD(detail);
+      setAssignee(detail.assignee ?? '');
       setForm({ type: detail.effective.type, subtype: detail.effective.subtype ?? '', dependency: detail.effective.dependency, urgency: detail.effective.urgency });
       setError('');
     } catch (e) {
