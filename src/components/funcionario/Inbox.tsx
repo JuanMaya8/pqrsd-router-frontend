@@ -27,8 +27,8 @@ export function Inbox({ items, total, selectedId, onOpen, loading }: { items: Su
                 {it.source === 'fallback' && <span className="chip crit" title="La IA no estaba disponible">Sin IA</span>}
               </td>
               <td><UrgencyChip id={it.urgency.id} label={it.urgency.label} /><div className="small muted mono">prioridad {Math.round(it.priorityScore)}</div></td>
-              <td><b>{fmtDay(it.dueDate)}</b><div className="small muted">{dueText(it.businessDaysLeft, it.slaStatus)}</div></td>
-              <td><StatusChip status={it.status} /></td>
+              <td><b>{fmtDay(it.dueDate)}</b><div className="small muted">{dueText(it.businessDaysLeft, it.slaStatus)}</div>{it.extended && <span className="chip" title="Plazo ampliado (Art. 14, parágrafo)">ampliado</span>}</td>
+              <td><StatusChip status={it.status} />{it.assignee && <div className="small muted" style={{ marginTop: 4 }}>{it.assignee}</div>}</td>
             </tr>
           ))}
         </tbody>
