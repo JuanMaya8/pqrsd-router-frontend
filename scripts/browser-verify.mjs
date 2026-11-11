@@ -37,7 +37,7 @@ if (shots) mkdirSync(shots, { recursive: true });
 // ---- 1) mock backend
 console.log('› Empaquetando la API simulada…');
 await esbuild.build({ entryPoints: [join(root, 'scripts/verify/mock-server.ts')], outfile: join(outDir, 'mock-server.mjs'), bundle: true, platform: 'node', format: 'esm', target: 'node18', logLevel: 'warning' });
-const { startMock } = await import(join(outDir, 'mock-server.mjs'));
+const { startMock } = await import(pathToFileURL(join(outDir, 'mock-server.mjs')).href);
 const mock = await startMock();
 const api = `http://127.0.0.1:${mock.port}/api/v1`;
 
