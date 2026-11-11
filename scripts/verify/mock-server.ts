@@ -100,7 +100,7 @@ export async function startMock(): Promise<MockHandle> {
         const offset = Number(query.offset ?? 0);
         return json(200, { items: items.slice(offset, offset + limit), total: items.length });
       }
-      const m = /^\/staff\/pqrsd\/([^/]+)(?:\/(confirm|reclassify|assign|extend|answer|close))?$/.exec(path);
+      const m = /^\/staff\/pqrsd\/([^/]+)(?:\/(confirm|reclassify|assign|extend|transfer|answer|close))?$/.exec(path);
       if (m) {
         const d = cases.get(m[1]);
         if (!d) return fail(404, 'NOT_FOUND', 'No existe.');
