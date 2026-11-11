@@ -4,6 +4,7 @@
  *   1. start the AI (:8000), the backend (:3001, STAFF_API_KEY set) and `npm run build && npm start` (:3000)
  *   2. E2E_STAFF_KEY=<the backend key> npm run e2e:fullstack
  *
+ * Also runs axe-core (WCAG 2.1 A/AA) on every screen it visits.
  * Env: E2E_BASE_URL (default http://localhost:3000), E2E_STAFF_KEY (default empty = backend in dev mode), CHROMIUM_PATH.
  * It creates real cases in the backend: run it against a development data directory, never production.
  */
