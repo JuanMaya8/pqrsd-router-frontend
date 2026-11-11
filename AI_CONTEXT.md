@@ -60,13 +60,13 @@ Si cambias una pantalla, ajusta `scripts/browser-verify.mjs` (los textos y `data
 * 48/48 comprobaciones en Chromium real con los componentes reales (radicar, vista previa y carrera de respuestas, validaciones, anónimo, consulta, ingreso de funcionario y clave revocada, filtros, detalle, confirmar/reclasificar/responder/cerrar, CSV, tiempo real, demo, reentrenar, móvil 375 px).
 * Recorrido completo contra el **dominio real del backend** (IA falsa) servido por un adaptador temporal HTTP: sin errores. Compatibilidad estática de tipos backend → frontend en los 10 endpoints usados.
 
-**Escrito pero NO ejecutado:**
-* `next dev/build/start`: nunca se compiló la app con Next (`src/app/**`, `next.config.mjs`, `robots.ts`, `error.tsx`, `metadata`). Revisado a mano contra Next 14.
-* SSG/SSR/ISR reales (que `/transparencia` se regenere cada 60 s, que `/consulta/...` no se cachee, comportamiento si el backend está caído durante el *build*).
-* `defaultSocketFactory` (`socket.io-client` real) contra el gateway real; reconexión.
-* `Dockerfile`, `docker-compose.yml`, `.github/workflows/ci.yml`.
-* React 18 y `@types/react` reales (las pruebas usaron React 19 y tipos simulados).
-→ **Primera tarea al retomar:** `npm install && npm run typecheck && npm test && npm run build`, arreglar lo que falle y luego `docker compose up --build` con los 3 repos.
+**Verificado al retomar (2026-11-11, Windows, Node 22, Next 14.2.35, React 18 y @types reales):**
+* `npm run typecheck` limpio, `npm test` 16/16, `npm run build` OK, `npm run verify:browser` 48/48.
+* `npm run e2e:fullstack` (nuevo, `scripts/e2e-fullstack.mjs`) 8/8 contra la pila real (procesos locales y `docker compose up --build` de los 3 repos).
+* Corregido: `socketOrigin()`/`apiBaseUrl()` usaban `??`; el Dockerfile deja `NEXT_PUBLIC_SOCKET_URL=""` → el socket iba a :3000. Ahora `||` (`tests/api.test.ts`).
+* Corregido: `scripts/browser-verify.mjs` hacía `import()` de una ruta absoluta (falla en Windows) → `pathToFileURL`.
+* Comprobado: en Docker el build prerenderiza `/transparencia` sin backend y sirve el aviso de error hasta la primera regeneración ISR (≤ 60 s + 1 visita).
+* `package-lock.json` versionado; la CI usa `npm ci`.
 
 **No hecho:**
 * Usuarios, roles y asignación a funcionarios concretos (hoy una clave compartida); prórrogas y traslados por competencia en la interfaz; notificaciones al ciudadano.
