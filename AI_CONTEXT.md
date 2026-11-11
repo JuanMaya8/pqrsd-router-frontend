@@ -46,8 +46,8 @@ npm install
 cp .env.example .env.local
 npm run dev                  # :3000 (necesita el backend en :3001)
 npm run typecheck            # app + pruebas/scripts
-npm test                     # 16 pruebas (tsx --test con stubs de next/*)
-E2E_STAFF_KEY=... npm run e2e:fullstack   # 8 comprobaciones contra next start + backend + IA reales
+npm test                     # 17 pruebas (tsx --test con stubs de next/*)
+E2E_STAFF_KEY=... npm run e2e:fullstack   # 12 comprobaciones (incluye axe) contra next start + backend + IA reales
 npx playwright install chromium && npm run verify:browser     # 48 comprobaciones en Chromium contra una API simulada
 npm run build && npm start
 ```
