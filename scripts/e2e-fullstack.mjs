@@ -89,13 +89,27 @@ try {
   if (radicado && code) {
     await citizen.goto(`${BASE}/consulta/${radicado}?code=${code}`);
     const body = await citizen.locator('body').innerText();
-    check('Consulta: el estado público se muestra por SSR', body.includes(radicado) && /revisi[oó]n/i.test(body), body.slice(0, 160));
+    check('Consulta: el estado público se muestra por SSR', body.includes(radicado) && /asignada/i.test(body), body.slice(0, 160));
+    check('Consulta: el ciudadano ve la ampliación del plazo, sin el responsable', /amplió el plazo/i.test(body) && !body.includes('María Gómez'));
     const robots = await citizen.locator('meta[name="robots"]').getAttribute('content');
     check('Consulta: la página no se indexa', /noindex/.test(robots ?? ''), String(robots));
+    await audit(citizen, '/consulta/[radicado]');
   } else check('Consulta: se encontró el código de seguimiento en el comprobante', false);
 
-  await citizen.goto(`${BASE}/transparencia`);
-  check('Transparencia: muestra indicadores públicos', /recibid/i.test(await citizen.locator('body').innerText()));
+  // ISR: a build made while the backend was unreachable (always the case in Docker) serves the error notice until the first
+  // regeneration, at most 60 s later. Wait for that window instead of failing.
+  let transparencyOk = false;
+  for (const started = Date.now(); !transparencyOk && Date.now() - started < 80_000; ) {
+    await citizen.goto(`${BASE}/transparencia`);
+    transparencyOk = /recibidas/i.test(await citizen.locator('body').innerText());
+    if (!transparencyOk) await citizen.waitForTimeout(5_000);
+  }
+  check('Transparencia: muestra indicadores públicos (tras la ventana ISR si el build no tenía backend)', transparencyOk);
+  for (const path of ['/', '/consulta', '/transparencia']) {
+    await citizen.goto(`${BASE}${path}`);
+    await audit(citizen, path);
+  }
+  check('Accesibilidad: sin violaciones WCAG 2.1 AA (axe-core) en las pantallas recorridas', a11y.length === 0, a11y.slice(0, 5).join(' | '));
   check('Sin errores de página', errors.length === 0, errors.slice(0, 3).join(' | '));
 } finally {
   await browser.close();
