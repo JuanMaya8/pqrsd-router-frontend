@@ -81,4 +81,4 @@ npm ci && npm run typecheck && npm test
 * El acceso de funcionarios usa **claves con nombre** (`STAFF_USERS`), no un sistema completo de usuarios y roles.
 * La bandeja filtra en memoria. Sobra para los volúmenes de una entidad mediana o de la demo, pero no para millones de casos.
 * En el plan gratuito de Render los servicios se duermen tras unos 15 minutos sin uso y la primera visita tarda cerca de un minuto.
-  La base de datos gratuita vence a los 30 días.
+  Ábrelos un par de minutos antes de presentar. La base de datos está en Neon (gratis, no vence).
