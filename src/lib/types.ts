@@ -155,6 +155,10 @@ export interface ListQuery {
   urgency?: Urgency | '';
   sla?: SlaStatus | '';
   needsReview?: boolean;
+  /** exact name of the staff member in charge */
+  assignee?: string;
+  /** only cases without a staff member in charge */
+  unassigned?: boolean;
   q?: string;
   sort?: 'priority:desc' | 'dueDate:asc' | 'receivedAt:desc';
   limit?: number;
