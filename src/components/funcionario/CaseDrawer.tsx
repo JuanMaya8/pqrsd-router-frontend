@@ -147,6 +147,26 @@ export function CaseDrawer({ id, api, taxonomy, me = null, onClose, onChanged }:
               </details>
             )}
 
+            {open && (
+              <details className="card flat" aria-label="Trasladar por competencia">
+                <summary style={{ cursor: 'pointer', fontWeight: 650 }}>Trasladar por competencia (Art. 21, Ley 1437 de 2011)</summary>
+                <div className="stack" style={{ marginTop: 10 }}>
+                  <p className="small muted" style={{ margin: 0 }}>Si el asunto no es de esta entidad, remítelo a la autoridad competente dentro de los 5 días hábiles siguientes a la recepción. El oficio queda como respuesta, se informa al ciudadano y el caso se cierra.</p>
+                  <div className="field"><label htmlFor="d-f-entity">Autoridad competente</label>
+                    <input id="d-f-entity" className="input" maxLength={200} value={tr.entity} placeholder="Ej.: Superintendencia de Servicios Públicos Domiciliarios" onChange={(e) => setTr({ ...tr, entity: e.target.value })} /></div>
+                  <div className="field"><label htmlFor="d-f-treason">Motivo (se informa al ciudadano)</label>
+                    <textarea id="d-f-treason" className="input" style={{ minHeight: 80 }} maxLength={1000} value={tr.reason} placeholder="Explica por qué esta entidad no es competente (mínimo 20 caracteres)…" onChange={(e) => setTr({ ...tr, reason: e.target.value })} /></div>
+                  <div><button className="btn" disabled={busy || !trValid} onClick={() => run(() => api.transfer(d.id, tr.entity.trim(), tr.reason.trim()))}>Trasladar y cerrar</button></div>
+                </div>
+              </details>
+            )}
+
+            {d.transfer && (
+              <p className="alert" data-testid="transfer">
+                Trasladada a <b>{d.transfer.entity}</b> el {fmtDateTime(d.transfer.at)}{d.transfer.late && ' (fuera de los 5 días hábiles del Art. 21)'}.
+              </p>
+            )}
+
             {d.citizen && (
               <section>
                 <h3>Ciudadano <span className="chip crit">dato personal</span></h3>
