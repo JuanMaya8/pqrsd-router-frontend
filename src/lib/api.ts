@@ -55,6 +55,7 @@ async function send(path: string, o: Options): Promise<Response> {
   try {
     return await fetch(`${apiBaseUrl()}${path}`, init);
   } catch (e) {
+    if (timeout?.aborted) throw new ApiError(0, 'BACKEND_TIMEOUT', 'El servidor está tardando en responder (puede estar arrancando). Intenta de nuevo en un minuto.');
     if (e instanceof DOMException && e.name === 'AbortError') throw e;
     throw new ApiError(0, 'BACKEND_UNREACHABLE', 'No pudimos conectar con el servidor. Intenta de nuevo en unos minutos.');
   }
