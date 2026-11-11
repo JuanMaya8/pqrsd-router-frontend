@@ -67,6 +67,24 @@ try {
     () => check('Funcionario: el caso nuevo aparece solo, en tiempo real', false, `${radicado} no apareció`),
   );
 
+  // --- staff: assign a person in charge and extend the term (Art. 14 parágrafo) on the real backend
+  await staff.getByRole('button', { name: `Abrir ${radicado}` }).click();
+  await staff.locator('#d-f-assignee').fill('María Gómez');
+  await staff.getByRole('button', { name: 'Asignar' }).click();
+  await staff.getByTestId('drawer').getByText(/Responsable asignado/).waitFor({ timeout: 10_000 }).then(
+    () => check('Funcionario: asignar responsable en el backend real', true),
+    () => check('Funcionario: asignar responsable en el backend real', false),
+  );
+  await staff.getByText(/Ampliar el plazo/).click();
+  await staff.locator('#d-f-days').fill('5');
+  await staff.locator('#d-f-reason').fill('Se necesita un concepto técnico de la empresa de acueducto.');
+  await staff.getByRole('button', { name: 'Ampliar plazo' }).click();
+  await staff.getByTestId('extension').waitFor({ timeout: 10_000 }).then(
+    () => check('Funcionario: ampliar el plazo en el backend real', true),
+    () => check('Funcionario: ampliar el plazo en el backend real', false),
+  );
+  await audit(staff, '/funcionario detalle');
+
   // --- citizen tracking (SSR) with the code shown on the receipt
   if (radicado && code) {
     await citizen.goto(`${BASE}/consulta/${radicado}?code=${code}`);
