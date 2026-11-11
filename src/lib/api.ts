@@ -105,6 +105,7 @@ export function staffApi(staffKey: string) {
   const o = (extra: Options = {}): Options => ({ staffKey, ...extra });
   const post = <T>(path: string, body?: unknown) => request<T>(path, o({ method: 'POST', body: body ?? {} }));
   return {
+    me: () => request<{ name: string }>('/staff/me', o()),
     stats: () => request<StaffStats>('/staff/stats', o()),
     list: (q: ListQuery, signal?: AbortSignal) => request<Page<Summary>>(`/staff/pqrsd${qs(q)}`, o({ signal })),
     get: (id: string) => request<Detail>(`/staff/pqrsd/${id}`, o()),
