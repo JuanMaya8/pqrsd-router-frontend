@@ -1,6 +1,6 @@
 # Despliegue del frontend en Vercel
 
-Primero despliega el backend y la IA en Render (`pqrsd-router-backend/docs/DEPLOY.md`): necesitas la URL pública del backend.
+Primero crea la base en Neon y despliega el backend y la IA en Render (`pqrsd-router-backend/docs/DEPLOY.md`): necesitas la URL pública del backend.
 
 ## Pasos
 1. Vercel → **Add New → Project** → importa el repo `pqrsd-router-frontend`. Vercel detecta Next.js (no cambies los comandos).
