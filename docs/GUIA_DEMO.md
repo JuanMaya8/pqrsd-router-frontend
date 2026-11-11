@@ -61,7 +61,7 @@ frontend). Sin `DATABASE_URL`, el backend guarda los casos en archivos JSON, y s
 | Reglas de negocio | Plazos en días hábiles con festivos de Colombia (Ley 1755 de 2015), ampliación (Art. 14) y traslado (Art. 21 de la Ley 1437 de 2011) |
 | Datos personales (Ley 1581) | Consentimiento obligatorio, opción anónima y vistas públicas sin datos personales; a la IA no le llega el nombre ni el correo del ciudadano |
 | Calidad | Pruebas automáticas en los tres repos, auditoría de accesibilidad WCAG 2.1 AA (axe) y contrato común `docs/CONTRACT.md` |
-| Despliegue | Render (backend + IA + PostgreSQL, `render.yaml`) y Vercel (frontend): ver `docs/DEPLOY.md` |
+| Despliegue | Render (backend + IA, `render.yaml`), Neon (PostgreSQL) y Vercel (frontend): ver `docs/DEPLOY.md` |
 
 ## 4. Pruebas rápidas
 
