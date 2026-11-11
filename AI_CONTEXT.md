@@ -72,8 +72,13 @@ Si cambias una pantalla, ajusta `scripts/browser-verify.mjs` (los textos y `data
 axe-core en `e2e:fullstack` (12/12, claro y oscuro; se corrigió el contraste de `--warn`/`--high`), `sitemap.ts` + `lib/site.ts`, timeout de 25 s en las peticiones del servidor
 y `maxDuration = 30` (Vercel + backend dormido en Render), `docs/DEPLOY.md` (Vercel). Invariante nuevo: **no muestres el responsable ni el motivo de la ampliación en vistas públicas**.
 
+**Añadido en la entrega final (2026-11-11, verificado con `typecheck` y `npm test` 18/18; `verify:browser` y `e2e:fullstack` no se volvieron a ejecutar):**
+* «Sesión: <nombre>» (`GET /staff/me`) y botón «Asignarme»; el historial del panel muestra `actor`.
+* «Trasladar por competencia» en `CaseDrawer` (ids `d-f-entity`, `d-f-treason`, testid `transfer`) y aviso en la consulta pública (testid `tracking-transfer`).
+* `docs/GUIA_DEMO.md`: guía para la entrega (una orden de Docker, claves de demo y recorrido).
+
 **No hecho:**
-* Usuarios y roles (hoy una clave compartida; el responsable es texto libre); traslados por competencia en la interfaz.
+* Roles y permisos por dependencia (las cuentas con nombre tienen los mismos permisos).
 * Firefox/Safari, revisión con lector de pantalla, i18n, identidad visual de la entidad.
 * Paginación por cursor y virtualización para bandejas de miles de casos; gráficos históricos más allá de las 12 semanas de transparencia.
 * Adjuntos en la radicación; verificación anti-bots (captcha) en `/radicar`.
