@@ -68,9 +68,13 @@ Si cambias una pantalla, ajusta `scripts/browser-verify.mjs` (los textos y `data
 * Comprobado: en Docker el build prerenderiza `/transparencia` sin backend y sirve el aviso de error hasta la primera regeneración ISR (≤ 60 s + 1 visita).
 * `package-lock.json` versionado; la CI usa `npm ci`.
 
+**Añadido y verificado (2026-11-11):** responsable y ampliación del plazo en `CaseDrawer` (ids `d-f-assignee`, `d-f-days`, `d-f-reason`), filtro «Solo sin responsable»,
+axe-core en `e2e:fullstack` (12/12, claro y oscuro; se corrigió el contraste de `--warn`/`--high`), `sitemap.ts` + `lib/site.ts`, timeout de 25 s en las peticiones del servidor
+y `maxDuration = 30` (Vercel + backend dormido en Render), `docs/DEPLOY.md` (Vercel). Invariante nuevo: **no muestres el responsable ni el motivo de la ampliación en vistas públicas**.
+
 **No hecho:**
-* Usuarios, roles y asignación a funcionarios concretos (hoy una clave compartida); prórrogas y traslados por competencia en la interfaz; notificaciones al ciudadano.
-* Tests e2e de Next (Playwright contra `next start`), pruebas de accesibilidad automatizadas (axe), Firefox/Safari, i18n, identidad visual de la entidad, `sitemap.xml`.
+* Usuarios y roles (hoy una clave compartida; el responsable es texto libre); traslados por competencia en la interfaz.
+* Firefox/Safari, revisión con lector de pantalla, i18n, identidad visual de la entidad.
 * Paginación por cursor y virtualización para bandejas de miles de casos; gráficos históricos más allá de las 12 semanas de transparencia.
 * Adjuntos en la radicación; verificación anti-bots (captcha) en `/radicar`.
 
