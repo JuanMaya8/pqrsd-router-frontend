@@ -15,13 +15,14 @@ export class ApiError extends Error {
 const DEFAULT_URL = 'http://localhost:3001/api/v1';
 
 export function apiBaseUrl(): string {
-  if (typeof window === 'undefined') return (process.env.API_URL_INTERNAL ?? process.env.NEXT_PUBLIC_API_URL ?? DEFAULT_URL).replace(/\/$/, '');
-  return (process.env.NEXT_PUBLIC_API_URL ?? DEFAULT_URL).replace(/\/$/, '');
+  if (typeof window === 'undefined') return (process.env.API_URL_INTERNAL || process.env.NEXT_PUBLIC_API_URL || DEFAULT_URL).replace(/\/$/, '');
+  return (process.env.NEXT_PUBLIC_API_URL || DEFAULT_URL).replace(/\/$/, '');
 }
 
-/** Origin for socket.io (the backend URL without the /api/v1 suffix). Browser only. */
+/** Origin for socket.io (the backend URL without the /api/v1 suffix). Browser only.
+ *  `||`, not `??`: the Dockerfile defines NEXT_PUBLIC_SOCKET_URL as an empty string when no build arg is given. */
 export function socketOrigin(): string {
-  return (process.env.NEXT_PUBLIC_SOCKET_URL ?? process.env.NEXT_PUBLIC_API_URL ?? DEFAULT_URL).replace(/\/api\/v\d+\/?$/, '');
+  return (process.env.NEXT_PUBLIC_SOCKET_URL || process.env.NEXT_PUBLIC_API_URL || DEFAULT_URL).replace(/\/api\/v\d+\/?$/, '');
 }
 
 interface Options {
