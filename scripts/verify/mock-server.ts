@@ -113,6 +113,18 @@ export async function startMock(): Promise<MockHandle> {
           d.status = 'assigned';
           d.timeline.push({ at: now, event: 'reclassified', by: 'staff' });
         }
+        if (action === 'assign') {
+          d.assignee = (body as { assignee: string | null }).assignee;
+          d.status = 'assigned';
+          d.timeline.push({ at: now, event: 'assigned', by: 'staff', detail: d.assignee ? `a cargo de ${d.assignee}` : 'sin responsable' });
+        }
+        if (action === 'extend') {
+          if (d.extension) return fail(409, 'EXTENSION_NOT_ALLOWED', 'El plazo ya fue ampliado una vez.');
+          const b = body as { days: number; reason: string };
+          d.extension = { days: b.days, reason: b.reason, at: now, originalDueDate: d.dueDate };
+          d.extended = true;
+          d.timeline.push({ at: now, event: 'extended', by: 'staff' });
+        }
         if (action === 'answer') {
           if (d.status === 'answered') return fail(409, 'INVALID_TRANSITION', 'La solicitud ya fue respondida.');
           d.status = 'answered'; d.slaStatus = 'done';
