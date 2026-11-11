@@ -126,6 +126,13 @@ export async function startMock(): Promise<MockHandle> {
           d.extended = true;
           d.timeline.push({ at: now, event: 'extended', by: 'staff' });
         }
+        if (action === 'transfer') {
+          const b = body as { entity: string; reason: string };
+          d.transfer = { entity: b.entity, reason: b.reason, at: now, late: false };
+          d.status = 'closed'; d.slaStatus = 'done';
+          d.response = { text: `Trasladada a ${b.entity} (Art. 21, Ley 1437 de 2011). Motivo: ${b.reason}`, answeredAt: now };
+          d.timeline.push({ at: now, event: 'transferred', by: 'staff' });
+        }
         if (action === 'answer') {
           if (d.status === 'answered') return fail(409, 'INVALID_TRANSITION', 'La solicitud ya fue respondida.');
           d.status = 'answered'; d.slaStatus = 'done';
