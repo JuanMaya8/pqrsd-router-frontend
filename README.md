@@ -20,8 +20,9 @@ cp .env.example .env.local        # ajusta NEXT_PUBLIC_API_URL si el backend no 
 npm run dev                       # http://localhost:3000
 
 npm run typecheck                 # tsc (app) + tsc (pruebas y scripts de verificación)
-npm test                          # 14 pruebas: utilidades, segmentación de entidades y render de componentes
+npm test                          # 16 pruebas: utilidades, URLs del backend, segmentación de entidades y render de componentes
 npm run verify:browser            # Chromium real + API simulada: 48 comprobaciones (necesita `npx playwright install chromium`)
+E2E_STAFF_KEY=... npm run e2e:fullstack   # Chromium contra next start + backend + IA reales: 8 comprobaciones
 npm run build && npm start        # producción
 ```
 
