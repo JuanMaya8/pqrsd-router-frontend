@@ -98,6 +98,10 @@ export interface Summary {
   slaStatus: SlaStatus;
   source: 'ai' | 'fallback';
   isDemo: boolean;
+  /** staff member in charge, or null */
+  assignee: string | null;
+  /** the legal term was extended (Art. 14 parágrafo) */
+  extended: boolean;
 }
 
 export interface Entity { type: string; label: string; text: string; start: number; end: number; value: string | null; pii: boolean; approx: boolean }
