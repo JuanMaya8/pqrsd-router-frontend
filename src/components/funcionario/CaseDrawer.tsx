@@ -10,10 +10,10 @@ import { segmentText } from '@/lib/segments';
 import { PQRSD_TYPES, SUBTYPES, URGENCIES, type Detail, type Taxonomy } from '@/lib/types';
 
 const pct = (c: number): string => `${Math.round(c * 100)} %`;
-const EVENT_ES: Record<string, string> = { received: 'Recibida', classified: 'Clasificada', confirmed: 'Confirmada por funcionario', reclassified: 'Reclasificada por funcionario', assigned: 'Responsable asignado', extended: 'Plazo ampliado', answered: 'Respondida', closed: 'Cerrada' };
+const EVENT_ES: Record<string, string> = { received: 'Recibida', classified: 'Clasificada', confirmed: 'Confirmada por funcionario', reclassified: 'Reclasificada por funcionario', assigned: 'Responsable asignado', extended: 'Plazo ampliado', transferred: 'Trasladada por competencia', answered: 'Respondida', closed: 'Cerrada' };
 const BY_ES: Record<string, string> = { citizen: 'ciudadano', ai: 'IA', fallback: 'respaldo', staff: 'funcionario', system: 'sistema' };
 
-export function CaseDrawer({ id, api, taxonomy, onClose, onChanged }: { id: string; api: StaffApi; taxonomy: Taxonomy; onClose: () => void; onChanged: () => void }) {
+export function CaseDrawer({ id, api, taxonomy, me = null, onClose, onChanged }: { id: string; api: StaffApi; taxonomy: Taxonomy; me?: string | null; onClose: () => void; onChanged: () => void }) {
   const [d, setD] = useState<Detail | null>(null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
