@@ -6,6 +6,8 @@ import type { TrackingView as Tracking } from '@/lib/types';
 
 // SSR on every request: the status must always be fresh and the private code must never be cached by a CDN.
 export const dynamic = 'force-dynamic';
+// Vercel: leave room for a backend that is waking up (free tiers) before the function is cut (api.ts aborts at 25 s).
+export const maxDuration = 30;
 export const metadata: Metadata = { title: 'Estado de mi solicitud', robots: { index: false, follow: false } };
 
 export default async function TrackingPage({ params, searchParams }: { params: { radicado: string }; searchParams: { code?: string | string[] } }) {
