@@ -28,6 +28,12 @@ export function TrackingView({ t }: { t: Tracking }) {
         </table>
       </section>
 
+      {t.transfer && (
+        <p className="alert" data-testid="tracking-transfer">
+          Tu solicitud no es competencia de esta entidad y fue trasladada a <b>{t.transfer.entity}</b> (Art. 21, Ley 1437 de 2011). Esa autoridad debe responderte.
+        </p>
+      )}
+
       {t.response ? (
         <section className="card" aria-label="Respuesta de la entidad">
           <h2>Respuesta de la entidad</h2>
