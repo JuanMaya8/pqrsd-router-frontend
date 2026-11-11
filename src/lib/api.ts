@@ -110,6 +110,8 @@ export function staffApi(staffKey: string) {
     get: (id: string) => request<Detail>(`/staff/pqrsd/${id}`, o()),
     confirm: (id: string, note?: string) => post<Detail>(`/staff/pqrsd/${id}/confirm`, note ? { note } : {}),
     reclassify: (id: string, body: { type?: string; subtype?: string; dependency?: string; urgency?: string; note?: string }) => post<Detail>(`/staff/pqrsd/${id}/reclassify`, body),
+    assign: (id: string, assignee: string | null) => post<Detail>(`/staff/pqrsd/${id}/assign`, { assignee }),
+    extend: (id: string, days: number, reason: string) => post<Detail>(`/staff/pqrsd/${id}/extend`, { days, reason }),
     answer: (id: string, response: string) => post<Detail>(`/staff/pqrsd/${id}/answer`, { response }),
     close: (id: string) => post<Detail>(`/staff/pqrsd/${id}/close`),
     exportCsv: async (q: ListQuery): Promise<Blob> => {
