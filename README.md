@@ -123,9 +123,9 @@ Flujo de datos: `navegador → api.ts → backend (/api/v1) → IA`. El servidor
 * Textos legales de la portada: referencia, no asesoría jurídica; **validar con el área jurídica** (sobre todo el plazo de las denuncias).
 * Un solo idioma (español) y una sola entidad.
 
-## Despliegue (más adelante)
-Vercel/Netlify (poner `NEXT_PUBLIC_API_URL` apuntando al backend público) o contenedor (`Dockerfile`, salida `standalone`). El backend debe tener
-`CORS_ORIGINS` con el dominio del frontend. Detrás de HTTPS, porque la clave de funcionario viaja en una cabecera.
+## Despliegue
+Vercel: paso a paso en [docs/DEPLOY.md](docs/DEPLOY.md) (`NEXT_PUBLIC_API_URL` = backend de Render; luego el dominio de Vercel en `CORS_ORIGINS` del backend).
+También como contenedor (`Dockerfile`, salida `standalone`). Siempre detrás de HTTPS: la clave de funcionario viaja en una cabecera.
 
 ## Nombre de repositorio sugerido
 `pqrsd-router-frontend`
