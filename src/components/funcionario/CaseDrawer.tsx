@@ -19,6 +19,8 @@ export function CaseDrawer({ id, api, taxonomy, onClose, onChanged }: { id: stri
   const [busy, setBusy] = useState(false);
   const [form, setForm] = useState({ type: '', subtype: '', dependency: '', urgency: '' });
   const [response, setResponse] = useState('');
+  const [assignee, setAssignee] = useState('');
+  const [ext, setExt] = useState({ days: '', reason: '' });
 
   const load = useCallback(async () => {
     try {
