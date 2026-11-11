@@ -52,6 +52,8 @@ try {
     () => check('Funcionario: el socket real se conecta («En vivo»)', false, 'el indicador no cambió'),
   );
 
+  await audit(staff, '/funcionario bandeja');
+
   await citizen.getByRole('checkbox').first().check(); // anonymous: no personal data in this run
   await citizen.getByRole('checkbox').last().check(); // consent (Ley 1581)
   await citizen.getByRole('button', { name: 'Radicar solicitud' }).click();
