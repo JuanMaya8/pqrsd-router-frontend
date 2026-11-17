@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { Icon } from './Icon';
 
 const RADICADO = /^PQRSD-\d{4}-\d{6}$/;
 
@@ -22,17 +23,23 @@ export function ConsultaForm() {
   };
 
   return (
-    <form className="card stack" onSubmit={go} noValidate style={{ maxWidth: 520 }}>
-      <div className="field">
-        <label htmlFor="radicado">Número de radicado</label>
-        <input id="radicado" className="input mono" placeholder="PQRSD-2025-000123" value={radicado} onChange={(e) => setRadicado(e.target.value)} autoComplete="off" />
-      </div>
-      <div className="field">
-        <label htmlFor="code">Código de seguimiento</label>
-        <input id="code" className="input mono" placeholder="K7M2QX" maxLength={6} value={code} onChange={(e) => setCode(e.target.value)} autoComplete="off" />
+    <form className="card stack" onSubmit={go} noValidate aria-labelledby="consulta-title">
+      <h2 id="consulta-title" style={{ fontSize: '1.1rem', display: 'flex', gap: 8, alignItems: 'center' }}><Icon name="file" />Datos de tu comprobante</h2>
+      <div className="grid cols-2">
+        <div className="field">
+          <label htmlFor="radicado">Número de radicado</label>
+          <input id="radicado" className="input mono" placeholder="PQRSD-2025-000123" value={radicado} onChange={(e) => setRadicado(e.target.value)} autoComplete="off" />
+        </div>
+        <div className="field">
+          <label htmlFor="code">Código de seguimiento</label>
+          <input id="code" className="input mono" placeholder="K7M2QX" maxLength={6} value={code} onChange={(e) => setCode(e.target.value)} autoComplete="off" />
+        </div>
       </div>
       {error && <p className="alert error" role="alert">{error}</p>}
-      <button className="btn primary" type="submit">Consultar</button>
+      <div className="row spread">
+        <span className="small muted"><Icon name="lock" size={14} /> Solo tú puedes ver tu solicitud con estos dos datos.</span>
+        <button className="btn primary" type="submit"><Icon name="search" />Consultar</button>
+      </div>
     </form>
   );
 }
