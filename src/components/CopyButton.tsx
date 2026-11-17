@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Icon } from './Icon';
 
 export function CopyButton({ value, label = 'Copiar' }: { value: string; label?: string }) {
   const [done, setDone] = useState(false);
@@ -18,7 +19,8 @@ export function CopyButton({ value, label = 'Copiar' }: { value: string; label?:
         }
       }}
     >
-      {done ? '✓ Copiado' : label}
+      <Icon name={done ? 'check' : 'copy'} size={16} />
+      <span aria-live="polite">{done ? 'Copiado' : label}</span>
     </button>
   );
 }
