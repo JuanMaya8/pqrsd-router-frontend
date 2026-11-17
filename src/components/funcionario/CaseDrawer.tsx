@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { SlaChip, StatusChip, UrgencyChip } from '../Chips';
+import { Icon } from '../Icon';
 import { Timeline } from '../Timeline';
 import { errorMessage, type StaffApi } from '@/lib/api';
 import { dueText, fmtDay, fmtDateTime } from '@/lib/format';
@@ -72,21 +73,26 @@ export function CaseDrawer({ id, api, taxonomy, me = null, onClose, onChanged }:
     <>
       <div className="drawer-backdrop" onClick={onClose} aria-hidden="true" />
       <aside className="drawer" role="dialog" aria-modal="true" aria-label="Detalle de la solicitud" data-testid="drawer">
-        <div className="row spread" style={{ marginBottom: 12 }}>
-          <h2 style={{ margin: 0 }} className="mono">{d?.radicado ?? '…'}</h2>
-          <button className="btn sm" onClick={onClose}>Cerrar ✕</button>
+        <div className="drawer-head">
+          <div className="row spread" style={{ flexWrap: 'nowrap', alignItems: 'flex-start' }}>
+            <h2 style={{ margin: 0, overflowWrap: 'anywhere' }} className="mono">{d?.radicado ?? '…'}</h2>
+            <button className="btn sm" onClick={onClose}><Icon name="x" size={16} />Cerrar</button>
+          </div>
+          {d && (
+            <div className="row" style={{ gap: 6, marginTop: 10 }}>
+              <StatusChip status={d.status} /><SlaChip status={d.slaStatus} /><UrgencyChip id={d.urgency.id} label={`Urgencia ${d.urgency.label.toLowerCase()}`} />
+              {d.isDemo && <span className="chip">demo</span>}
+            </div>
+          )}
         </div>
+        <div className="drawer-body">
         {error && <p className="alert error" role="alert">{error}</p>}
         {!d && !error && <div className="skeleton" style={{ height: 200 }} />}
         {d && (
           <div className="stack">
-            <div className="row">
-              <StatusChip status={d.status} /><SlaChip status={d.slaStatus} /><UrgencyChip id={d.urgency.id} label={`Urgencia ${d.urgency.label.toLowerCase()}`} />
-              {d.isDemo && <span className="chip">demo</span>}
-            </div>
 
             <section>
-              <h3>Texto del ciudadano</h3>
+              <h3><Icon name="user" />Texto del ciudadano</h3>
               <div className="text-block" data-testid="case-text">
                 {segmentText(d.text, d.classification.entities).map((s, i) =>
                   s.entity ? <mark key={i} className={`ent ${s.entity.pii ? 'pii' : ''}`} title={`${s.entity.label}${s.entity.pii ? ' · dato personal' : ''}`}>{s.text}</mark> : <span key={i}>{s.text}</span>,
@@ -95,8 +101,8 @@ export function CaseDrawer({ id, api, taxonomy, me = null, onClose, onChanged }:
               <p className="small muted">Subrayado: entidades detectadas por la IA; en rojo, datos personales.</p>
             </section>
 
-            <section>
-              <h3>Lo que dijo la IA {d.classification.source === 'fallback' && <span className="chip crit">respaldo por palabras clave</span>}</h3>
+            <section className="card soft" style={{ padding: 16 }}>
+              <h3><Icon name="sparkles" />Lo que dijo la IA {d.classification.source === 'fallback' && <span className="chip crit">respaldo por palabras clave</span>}</h3>
               <table className="kvtable">
                 <tbody>
                   <tr><td>Tipo</td><td><b>{d.type.label}</b> <span className="muted small">({pct(d.classification.type.confidence)})</span><Reasons items={d.classification.type.reasons} /></td></tr>
@@ -108,12 +114,12 @@ export function CaseDrawer({ id, api, taxonomy, me = null, onClose, onChanged }:
               </table>
             </section>
 
-            <section>
-              <h3>Plazo legal</h3>
+            <section className={`deadline-box ${d.slaStatus === 'overdue' ? 'crit' : d.slaStatus === 'at_risk' ? 'warn' : ''}`}>
+              <h3><Icon name="calendar" />Plazo legal</h3>
               <p style={{ marginBottom: 4 }}><b>{d.deadline.legalDays} días hábiles</b> → vence <b>{fmtDay(d.dueDate)}</b> · {dueText(d.businessDaysLeft, d.slaStatus)}</p>
-              <p className="small muted">{d.deadline.basis}{d.deadline.verify && <b> Verificar con el área jurídica.</b>}</p>
+              <p className="small muted" style={{ marginBottom: d.extension ? undefined : 0 }}>{d.deadline.basis}{d.deadline.verify && <b> Verificar con el área jurídica.</b>}</p>
               {d.extension && (
-                <p className="alert" data-testid="extension">
+                <p className="alert info" data-testid="extension" style={{ marginBottom: 0 }}>
                   Plazo ampliado {d.extension.days} días hábiles (antes vencía el {fmtDay(d.extension.originalDueDate)}). Motivo: {d.extension.reason}
                 </p>
               )}
@@ -121,22 +127,22 @@ export function CaseDrawer({ id, api, taxonomy, me = null, onClose, onChanged }:
 
             {open && (
               <section className="card flat stack" aria-label="Responsable">
-                <h3 style={{ margin: 0 }}>Responsable</h3>
+                <h3 style={{ margin: 0 }}><Icon name="user" />Responsable</h3>
                 <div className="row">
                   <div className="field" style={{ flex: 1, minWidth: 200 }}><label htmlFor="d-f-assignee">Funcionario a cargo</label>
                     <input id="d-f-assignee" className="input" value={assignee} maxLength={120} placeholder="Nombre y apellido" onChange={(e) => setAssignee(e.target.value)} /></div>
                   <button className="btn" disabled={busy || assignee.trim() === (d.assignee ?? '') || (assignee.trim().length > 0 && assignee.trim().length < 3)} onClick={() => run(() => api.assign(d.id, assignee.trim() || null))}>
                     {assignee.trim() ? 'Asignar' : 'Quitar responsable'}
                   </button>
-                  {me && me.length >= 3 && d.assignee !== me && <button className="btn" disabled={busy} onClick={() => run(() => api.assign(d.id, me))}>Asignarme</button>}
+                  {me && me.length >= 3 && d.assignee !== me && <button className="btn action" disabled={busy} onClick={() => run(() => api.assign(d.id, me))}><Icon name="user" size={16} />Asignarme</button>}
                 </div>
               </section>
             )}
 
             {canExtend && (
               <details className="card flat" aria-label="Ampliar plazo">
-                <summary style={{ cursor: 'pointer', fontWeight: 650 }}>Ampliar el plazo (Art. 14, parágrafo, Ley 1437 de 2011)</summary>
-                <div className="stack" style={{ marginTop: 10 }}>
+                <summary><Icon name="clock" />Ampliar el plazo (Art. 14, parágrafo, Ley 1437 de 2011)</summary>
+                <div className="stack">
                   <p className="small muted" style={{ margin: 0 }}>Solo una vez y antes del vencimiento. El nuevo plazo no puede superar el doble del inicial (máximo {d.deadline.legalDays} días hábiles más). Si el ciudadano dejó correo, se le informa el motivo y la nueva fecha.</p>
                   <div className="field" style={{ maxWidth: 200 }}><label htmlFor="d-f-days">Días hábiles adicionales</label>
                     <input id="d-f-days" className="input" type="number" min={1} max={d.deadline.legalDays} value={ext.days} onChange={(e) => setExt({ ...ext, days: e.target.value })} /></div>
@@ -149,8 +155,8 @@ export function CaseDrawer({ id, api, taxonomy, me = null, onClose, onChanged }:
 
             {open && (
               <details className="card flat" aria-label="Trasladar por competencia">
-                <summary style={{ cursor: 'pointer', fontWeight: 650 }}>Trasladar por competencia (Art. 21, Ley 1437 de 2011)</summary>
-                <div className="stack" style={{ marginTop: 10 }}>
+                <summary><Icon name="forward" />Trasladar por competencia (Art. 21, Ley 1437 de 2011)</summary>
+                <div className="stack">
                   <p className="small muted" style={{ margin: 0 }}>Si el asunto no es de esta entidad, remítelo a la autoridad competente dentro de los 5 días hábiles siguientes a la recepción. El oficio queda como respuesta, se informa al ciudadano y el caso se cierra.</p>
                   <div className="field"><label htmlFor="d-f-entity">Autoridad competente</label>
                     <input id="d-f-entity" className="input" maxLength={200} value={tr.entity} placeholder="Ej.: Superintendencia de Servicios Públicos Domiciliarios" onChange={(e) => setTr({ ...tr, entity: e.target.value })} /></div>
@@ -162,14 +168,14 @@ export function CaseDrawer({ id, api, taxonomy, me = null, onClose, onChanged }:
             )}
 
             {d.transfer && (
-              <p className="alert" data-testid="transfer">
-                Trasladada a <b>{d.transfer.entity}</b> el {fmtDateTime(d.transfer.at)}{d.transfer.late && ' (fuera de los 5 días hábiles del Art. 21)'}.
+              <p className="alert info" data-testid="transfer">
+                <Icon name="forward" size={16} /> Trasladada a <b>{d.transfer.entity}</b> el {fmtDateTime(d.transfer.at)}{d.transfer.late && ' (fuera de los 5 días hábiles del Art. 21)'}.
               </p>
             )}
 
             {d.citizen && (
               <section>
-                <h3>Ciudadano <span className="chip crit">dato personal</span></h3>
+                <h3><Icon name="lock" />Ciudadano <span className="chip crit">dato personal</span></h3>
                 <table className="kvtable"><tbody>
                   {d.citizen.name && <tr><td>Nombre</td><td>{d.citizen.name}</td></tr>}
                   {d.citizen.email && <tr><td>Correo</td><td>{d.citizen.email}</td></tr>}
@@ -181,7 +187,7 @@ export function CaseDrawer({ id, api, taxonomy, me = null, onClose, onChanged }:
 
             {open && (
               <section className="card flat stack" aria-label="Revisar clasificación">
-                <h3 style={{ margin: 0 }}>Revisar y asignar</h3>
+                <h3 style={{ margin: 0 }}><Icon name="checkCircle" />Revisar y asignar</h3>
                 <div className="grid cols-2">
                   <div className="field"><label htmlFor="d-f-type">Tipo</label>
                     <select id="d-f-type" className="input" value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value, subtype: e.target.value === 'peticion' ? form.subtype || 'general' : '' })}>
@@ -212,17 +218,17 @@ export function CaseDrawer({ id, api, taxonomy, me = null, onClose, onChanged }:
             )}
 
             {open && (
-              <section className="stack" aria-label="Responder">
-                <h3 style={{ margin: 0 }}>Responder al ciudadano</h3>
+              <section className="card flat stack" aria-label="Responder">
+                <h3 style={{ margin: 0 }}><Icon name="message" />Responder al ciudadano</h3>
                 <div className="field"><label htmlFor="resp" className="sr-only">Respuesta</label>
                   <textarea id="resp" className="input" style={{ minHeight: 110 }} value={response} onChange={(e) => setResponse(e.target.value)} placeholder="Escribe la respuesta oficial (mínimo 10 caracteres)…" /></div>
-                <div><button className="btn primary" disabled={busy || response.trim().length < 10} onClick={() => run(() => api.answer(d.id, response.trim()))}>Enviar respuesta</button></div>
+                <div><button className="btn primary" disabled={busy || response.trim().length < 10} onClick={() => run(() => api.answer(d.id, response.trim()))}><Icon name="send" size={16} />Enviar respuesta</button></div>
               </section>
             )}
 
             {d.response && (
               <section>
-                <h3>Respuesta enviada</h3>
+                <h3><Icon name="message" />Respuesta enviada</h3>
                 <p className="small muted">{fmtDateTime(d.response.answeredAt)}</p>
                 <div className="text-block">{d.response.text}</div>
                 {d.status === 'answered' && <div style={{ marginTop: 10 }}><button className="btn" disabled={busy} onClick={() => run(() => api.close(d.id))}>Cerrar solicitud</button></div>}
@@ -230,11 +236,12 @@ export function CaseDrawer({ id, api, taxonomy, me = null, onClose, onChanged }:
             )}
 
             <section>
-              <h3>Historial</h3>
+              <h3><Icon name="history" />Historial</h3>
               <Timeline items={d.timeline.map((t) => ({ at: t.at, label: `${EVENT_ES[t.event] ?? t.event} · ${t.actor ?? BY_ES[t.by] ?? t.by}`, detail: t.detail }))} />
             </section>
           </div>
         )}
+        </div>
       </aside>
     </>
   );
