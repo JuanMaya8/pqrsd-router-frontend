@@ -4,7 +4,7 @@ export function BarList({ title, rows }: { title: string; rows: Array<{ key: str
   const max = Math.max(1, ...rows.map((r) => r.value));
   return (
     <section aria-label={title}>
-      <h3>{title}</h3>
+      <h2 style={{ fontSize: '1.1rem' }}>{title}</h2>
       <div className="bars">
         {rows.map((r) => (
           <div className="bar" key={r.key}>
