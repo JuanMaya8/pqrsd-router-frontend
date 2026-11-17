@@ -5,9 +5,11 @@ export function Timeline({ items }: { items: Array<{ at: string; label: string; 
     <ol className="timeline" aria-label="Historial de la solicitud">
       {items.map((t, i) => (
         <li key={`${t.at}-${i}`}>
-          <time dateTime={t.at}>{fmtDateTime(t.at)}</time>
-          {t.label}
-          {t.detail && <div className="small muted">{t.detail}</div>}
+          <div className="ev">
+            <b>{t.label}</b>
+            {t.detail && <div className="small muted">{t.detail}</div>}
+            <time dateTime={t.at}>{fmtDateTime(t.at)}</time>
+          </div>
         </li>
       ))}
     </ol>
