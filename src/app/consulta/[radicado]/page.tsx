@@ -24,8 +24,9 @@ export default async function TrackingPage({ params, searchParams }: { params: {
 
   if (data) return <TrackingView t={data} />;
   return (
-    <div className="stack">
-      <h1 style={{ fontSize: '1.8rem' }}>{notFound ? 'No encontramos esa solicitud' : 'No pudimos consultar tu solicitud'}</h1>
+    <div className="stack" style={{ maxWidth: 720 }}>
+      <p className="eyebrow">Consulta de solicitud</p>
+      <h1>{notFound ? 'No encontramos esa solicitud' : 'No pudimos consultar tu solicitud'}</h1>
       <p className={`alert ${notFound ? 'warn' : 'error'}`} role="alert">
         {notFound ? 'Revisa que el número de radicado y el código de seguimiento estén bien escritos. Por seguridad no indicamos cuál de los dos falló.' : error}
       </p>
