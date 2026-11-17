@@ -27,7 +27,7 @@ export function WeeklyChart({ weeks }: { weeks: Array<{ weekStart: string; recei
           );
         })}
       </svg>
-      <figcaption className="legend"><span><i style={{ background: 'var(--accent)' }} />Recibidas</span><span><i style={{ background: 'var(--ok)' }} />Respondidas</span></figcaption>
+      <figcaption className="legend"><span><i style={{ background: 'var(--primary)' }} />Recibidas</span><span><i style={{ background: 'var(--accent)', opacity: 0.65 }} />Respondidas</span></figcaption>
     </figure>
   );
 }
