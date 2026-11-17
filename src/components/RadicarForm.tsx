@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { ClassificationPreview } from './ClassificationPreview';
+import { Icon } from './Icon';
 import { ReceiptCard } from './ReceiptCard';
 import { ApiError, api, errorMessage } from '@/lib/api';
 import { fmtInt } from '@/lib/format';
@@ -73,8 +74,8 @@ export function RadicarForm() {
 
   const tooLong = text.length > MAX;
   return (
-    <form className="grid" style={{ gridTemplateColumns: 'minmax(0, 3fr) minmax(0, 2fr)', alignItems: 'start' }} onSubmit={submit} noValidate>
-      <div className="stack">
+    <form className="radicar-grid" onSubmit={submit} noValidate>
+      <div className="form-card stack">
         <div className="field">
           <label htmlFor="text">Cuéntanos qué necesitas, con tus palabras</label>
           <textarea
@@ -85,17 +86,17 @@ export function RadicarForm() {
             aria-describedby="text-help text-count"
             placeholder="Ej.: Hace tres semanas no llega el agua a mi barrio Santa Lucía y tengo un bebé en casa…"
           />
-          <div className="row spread">
-            <span id="text-help" className="small muted">Incluye dónde y desde cuándo ocurre. No escribas contraseñas ni datos bancarios.</span>
+          <div className="row spread" style={{ alignItems: 'flex-start' }}>
+            <span id="text-help" className="small muted" style={{ flex: '1 1 240px' }}><Icon name="shieldCheck" size={15} /> Incluye dónde y desde cuándo ocurre. No escribas contraseñas ni datos bancarios.</span>
             <span id="text-count" className={`counter ${tooLong ? 'bad' : ''}`}>{fmtInt(text.length)} / {fmtInt(MAX)}</span>
           </div>
         </div>
 
-        <fieldset className="card flat" style={{ border: '1px solid var(--line)' }}>
-          <legend className="small muted" style={{ padding: '0 6px' }}>Tus datos de contacto (opcionales)</legend>
-          <label className="check" style={{ marginBottom: 12 }}>
+        <fieldset className="group stack">
+          <legend>Tus datos de contacto (opcionales)</legend>
+          <label className="check check-box">
             <input type="checkbox" checked={anonymous} onChange={(e) => setAnonymous(e.target.checked)} />
-            <span>Radicar de forma anónima. <span className="muted">No podremos escribirte; consultarás la respuesta con tu número y tu código.</span></span>
+            <span><b><Icon name="eyeOff" size={16} /> Radicar de forma anónima.</b> <span className="muted">No podremos escribirte; consultarás la respuesta con tu número y tu código.</span></span>
           </label>
           {!anonymous && (
             <div className="grid cols-2">
@@ -107,7 +108,7 @@ export function RadicarForm() {
           )}
         </fieldset>
 
-        <label className="check">
+        <label className="check check-box">
           <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
           <span>Autorizo el tratamiento de mis datos personales para gestionar esta solicitud (Ley 1581 de 2012).</span>
         </label>
@@ -118,18 +119,21 @@ export function RadicarForm() {
           </div>
         )}
         <div className="row">
-          <button className="btn primary lg" type="submit" disabled={sending}>{sending ? 'Radicando…' : 'Radicar solicitud'}</button>
+          <button className="btn primary lg" type="submit" disabled={sending} style={{ flex: '1 1 260px' }}><Icon name="send" />{sending ? 'Radicando…' : 'Radicar solicitud'}</button>
         </div>
       </div>
 
       <aside className="card preview" aria-label="Vista previa de la clasificación" aria-live="polite">
-        <p className="eyebrow">Vista previa</p>
-        <h2 style={{ fontSize: '1.1rem' }}>Esto es lo que entendimos</h2>
+        <div className="row spread" style={{ marginBottom: 8 }}>
+          <span className="chip info"><span className="dot" aria-hidden="true" />Vista previa</span>
+          <span className="small muted">Se actualiza mientras escribes</span>
+        </div>
+        <h2 style={{ fontSize: '1.25rem' }}>Esto es lo que entendimos</h2>
         {preview.state === 'idle' && <p className="muted small" data-testid="preview-idle">Escribe tu caso (al menos {PREVIEW_MIN} caracteres) y verás aquí el tipo de solicitud, la dependencia a la que irá y el plazo legal de respuesta.</p>}
-        {preview.state === 'loading' && !preview.data && <div className="skeleton" style={{ height: 120 }} aria-label="Analizando" />}
+        {preview.state === 'loading' && !preview.data && <div className="skeleton" style={{ height: 160 }} aria-label="Analizando" />}
         {preview.state === 'error' && <p className="alert warn small">{preview.message}</p>}
         {preview.data && preview.state !== 'error' && <div data-testid="preview-ready" style={{ opacity: preview.state === 'loading' ? 0.55 : 1 }}><ClassificationPreview p={preview.data} /></div>}
-        <p className="small muted" style={{ marginTop: 12, marginBottom: 0 }}>La clasificación es automática y un funcionario la confirma. No cambia tu derecho a recibir respuesta.</p>
+        <p className="alert info small" style={{ marginTop: 16, marginBottom: 0 }}>La clasificación es automática y un funcionario la confirma. No cambia tu derecho a recibir respuesta.</p>
       </aside>
     </form>
   );
