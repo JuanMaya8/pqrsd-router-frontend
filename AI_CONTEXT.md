@@ -77,6 +77,15 @@ y `maxDuration = 30` (Vercel + backend dormido en Render), `docs/DEPLOY.md` (Ver
 * «Trasladar por competencia» en `CaseDrawer` (ids `d-f-entity`, `d-f-treason`, testid `transfer`) y aviso en la consulta pública (testid `tracking-transfer`).
 * `docs/GUIA_DEMO.md`: guía para la entrega (una orden de Docker, claves de demo y recorrido).
 
+**Rediseño visual (2026-11-17, verificado con `typecheck`, `npm test` 18/18 y `npm run build`; `verify:browser` y `e2e:fullstack` no se volvieron a ejecutar):**
+* Tokens «PQRSD Cívica Accesible» en `globals.css` (azules institucionales, Inter con `next/font`, controles de 44–48 px, foco amarillo con borde oscuro, claro y oscuro).
+* Iconos SVG propios en `components/Icon.tsx` (sin dependencias). El semáforo lleva color, icono y texto.
+* Solo capa visual: la lógica, el contrato, los ids/testids y los textos que usan las pruebas no cambiaron, y tampoco los patrones de renderizado.
+* Mejoras del mockup de Stitch que se dejaron fuera por no tener respaldo en el código: controles de contraste y tamaño de letra, preguntas frecuentes,
+  canales de atención, adjuntos, dictado por voz, borradores, constancia/respuesta en PDF, encuesta de satisfacción, CSV y «Compartir» públicos,
+  columnas «próximas a vencer (<48 h)», eficacia y días promedio por dependencia en transparencia, plantillas de respuesta y barra lateral de la bandeja.
+  No se usó la barra «Portal oficial | GOV.CO» ni datos de contacto inventados: el sitio es un prototipo, no un portal oficial.
+
 **No hecho:**
 * Roles y permisos por dependencia (las cuentas con nombre tienen los mismos permisos).
 * Firefox/Safari, revisión con lector de pantalla, i18n, identidad visual de la entidad.
