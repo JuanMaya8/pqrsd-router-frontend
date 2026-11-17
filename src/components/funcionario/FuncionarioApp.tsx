@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CaseDrawer } from './CaseDrawer';
+import { Icon } from '../Icon';
 import { Inbox } from './Inbox';
 import { StatsPanel } from './StatsPanel';
 import { defaultSocketFactory, useRealtime, type SocketFactory } from './useRealtime';
@@ -42,16 +43,17 @@ export function FuncionarioApp({ socketFactory = defaultSocketFactory }: { socke
   if (key === null) return <div className="skeleton" style={{ height: 160 }} aria-label="Cargando" />;
   if (key === '') {
     return (
-      <form className="card stack" onSubmit={login} style={{ maxWidth: 460 }} aria-label="Ingreso de funcionarios">
+      <form className="card stack" onSubmit={login} style={{ maxWidth: 480, margin: '0 auto', borderTop: '4px solid var(--primary)' }} aria-label="Ingreso de funcionarios">
         <div>
+          <span className="icon-badge solid" style={{ marginBottom: 12 }}><Icon name="lock" size={22} /></span>
           <p className="eyebrow">Funcionarios</p>
-          <h1 style={{ fontSize: '1.7rem' }}>Bandeja de solicitudes</h1>
+          <h1 style={{ fontSize: '1.75rem' }}>Bandeja de solicitudes</h1>
           <p className="muted small">Acceso solo para personal autorizado. Aquí se ven datos personales de los ciudadanos.</p>
         </div>
         <div className="field"><label htmlFor="staff-key">Clave de funcionario</label>
           <input id="staff-key" type="password" className="input" autoComplete="current-password" value={draft} onChange={(e) => setDraft(e.target.value)} /></div>
         {authError && <p className="alert error" role="alert">{authError}</p>}
-        <button className="btn primary" type="submit" disabled={checking}>{checking ? 'Verificando…' : 'Entrar'}</button>
+        <button className="btn primary lg" type="submit" disabled={checking}><Icon name="key" />{checking ? 'Verificando…' : 'Entrar'}</button>
         <p className="small muted" style={{ margin: 0 }}>Si el backend está en modo desarrollo sin clave, déjala vacía y pulsa «Entrar».</p>
       </form>
     );
@@ -116,25 +118,25 @@ function Dashboard({ staffKey, onLogout, socketFactory }: { staffKey: string; on
 
   return (
     <div className="stack">
-      <header className="row spread">
+      <header className="row spread" style={{ alignItems: 'flex-end' }}>
         <div>
-          <p className="eyebrow">Funcionarios</p>
-          <h1 style={{ fontSize: '2rem', margin: 0 }}>Bandeja de solicitudes</h1>
+          <p className="eyebrow"><Icon name="inbox" size={14} />Módulo de funcionarios</p>
+          <h1 style={{ fontSize: 'clamp(1.6rem, 3vw, 2rem)', marginBottom: 8 }}>Bandeja de solicitudes</h1>
+          <span className={`chip ${live ? 'ok' : ''}`} title="Conexión en tiempo real con el backend" aria-live="polite" data-testid="live">
+            <span className={`dot ${live ? 'live-dot' : ''}`} style={{ color: live ? undefined : 'var(--muted)' }} aria-hidden="true" />{live ? 'En vivo' : 'Sin conexión en vivo'}
+          </span>
         </div>
         <div className="row">
-          <span className="chip" title="Conexión en tiempo real con el backend" aria-live="polite" data-testid="live">
-            <span className="dot" style={{ color: live ? 'var(--ok)' : 'var(--muted)' }} aria-hidden="true" />{live ? 'En vivo' : 'Sin conexión en vivo'}
-          </span>
-          <button className="btn sm" onClick={() => act(async () => downloadBlob('pqrsd.csv', await client.exportCsv(query)), 'CSV descargado (sin textos ni datos personales).')} disabled={busy}>Exportar CSV</button>
-          {me && <span className="chip" data-testid="me" title="Tu nombre queda en el historial de cada acción">Sesión: {me}</span>}
-          <button className="btn sm" onClick={onLogout}>Salir</button>
+          {me && <span className="chip info" data-testid="me" title="Tu nombre queda en el historial de cada acción"><Icon name="user" />Sesión: {me}</span>}
+          <button className="btn sm" onClick={() => act(async () => downloadBlob('pqrsd.csv', await client.exportCsv(query)), 'CSV descargado (sin textos ni datos personales).')} disabled={busy}><Icon name="download" size={16} />Exportar CSV</button>
+          <button className="btn sm" onClick={onLogout}><Icon name="logout" size={16} />Salir</button>
         </div>
       </header>
 
       {error && <p className="alert error" role="alert">{error}</p>}
       {stats && <StatsPanel s={stats} onFilter={(f) => setFilter({ sla: f.sla, needsReview: f.needsReview, status: f.status })} />}
 
-      <section className="card stack" aria-label="Filtros">
+      <section className="card stack" aria-label="Filtros" style={{ padding: 20 }}>
         <div className="filters">
           <div className="field"><label htmlFor="q">Buscar</label><input id="q" className="input" placeholder="Texto o radicado" value={search} onChange={(e) => { setSearch(e.target.value); setPage(0); }} /></div>
           <div className="field"><label htmlFor="f-status">Estado</label>
@@ -159,13 +161,13 @@ function Dashboard({ staffKey, onLogout, socketFactory }: { staffKey: string; on
         <div className="row">
           <label className="check"><input type="checkbox" checked={!!filters.needsReview} onChange={(e) => setFilter({ needsReview: e.target.checked || undefined })} /><span>Solo las que la IA no está segura de clasificar</span></label>
           <label className="check"><input type="checkbox" data-testid="f-unassigned" checked={!!filters.unassigned} onChange={(e) => setFilter({ unassigned: e.target.checked || undefined })} /><span>Solo sin responsable</span></label>
-          <button className="btn sm" onClick={() => { setFilters({ sort: 'priority:desc' }); setSearch(''); setPage(0); }}>Limpiar filtros</button>
+          <button className="btn sm" style={{ marginLeft: 'auto' }} onClick={() => { setFilters({ sort: 'priority:desc' }); setSearch(''); setPage(0); }}><Icon name="refresh" size={16} />Limpiar filtros</button>
         </div>
       </section>
 
       <section className="card stack" aria-label="Bandeja">
         <div className="row spread">
-          <h2 style={{ margin: 0 }}>{fmtInt(data.total)} solicitudes</h2>
+          <h2 style={{ margin: 0 }} className="inbox-title"><Icon name="inbox" />{fmtInt(data.total)} solicitudes</h2>
           <div className="row">
             <button className="btn sm" disabled={page === 0} onClick={() => setPage(page - 1)}>← Anterior</button>
             <span className="small muted" data-testid="pager">Página {page + 1} de {pages}</span>
@@ -175,11 +177,11 @@ function Dashboard({ staffKey, onLogout, socketFactory }: { staffKey: string; on
         <Inbox items={data.items} total={data.total} selectedId={selected} onOpen={setSelected} loading={loading} />
       </section>
 
-      <details className="card" aria-label="Administración">
-        <summary style={{ cursor: 'pointer', fontWeight: 650 }}>IA y datos de demostración</summary>
+      <details className="card admin" aria-label="Administración">
+        <summary><Icon name="sparkles" />IA y datos de demostración</summary>
         <div className="grid cols-2" style={{ marginTop: 14 }}>
           <div className="stack">
-            <h3>Inteligencia artificial</h3>
+            <h3><Icon name="sparkles" size={16} /> Inteligencia artificial</h3>
             {ai ? (
               <>
                 <p className="small" style={{ margin: 0 }}>Estado: <b>{ai.available ? 'activa' : 'no disponible'}</b>{ai.modelVersion && <> · modelo <span className="mono">{ai.modelVersion}</span></>}</p>
@@ -190,7 +192,7 @@ function Dashboard({ staffKey, onLogout, socketFactory }: { staffKey: string; on
             <div><button className="btn" disabled={busy || !ai?.available} onClick={() => window.confirm('El reentrenamiento tarda unos segundos y reemplaza el modelo. ¿Continuar?') && act(() => client.retrain(), 'IA reentrenada con las correcciones de los funcionarios.')}>Reentrenar con correcciones</button></div>
           </div>
           <div className="stack">
-            <h3>Datos de demostración</h3>
+            <h3><Icon name="database" size={16} /> Datos de demostración</h3>
             <p className="small muted" style={{ margin: 0 }}>Crea casos simulados (marcados «demo») para mostrar el sistema. Se pueden borrar sin tocar los casos reales.</p>
             <div className="row">
               <button className="btn" disabled={busy} onClick={() => act(async () => `${(await client.seed(60)).created} casos de demostración creados.`)} data-testid="seed">Crear 60 casos de demostración</button>
